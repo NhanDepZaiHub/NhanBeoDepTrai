@@ -1,0 +1,19 @@
+getgenv().HopMirage = function()
+    local url = 'https://hostserver.porry.store/bloxfruit/bot/JobId/mirage'
+    local chooses
+    local foundServers = game:GetService('HttpService'):JSONDecode(game:HttpGet(url))
+    for i, v in foundServers.JobId do 
+        if v ~= game.JobId then 
+            chooses = v
+        end
+    end
+    game:GetService("TeleportService"):TeleportToPlaceInstance(7449423635, chooses, game.Players.LocalPlayer)
+end
+
+spawn(function()
+    while task.wait() do
+        pcall(function()
+            HopMirage()
+        end)
+    end
+end)
