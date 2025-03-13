@@ -1,0 +1,32 @@
+local Lighting = game:GetService("Lighting")
+
+-- Xóa sương mù cực mạnh
+local function removeFog()
+    Lighting.FogEnd = math.huge -- Tầm nhìn vô hạn
+    Lighting.FogStart = math.huge -- Bắt đầu sương mù từ khoảng cách vô hạn
+    Lighting.FogColor = Color3.new(1, 1, 1) -- Màu trắng hoàn toàn
+end
+
+removeFog()
+Lighting:GetPropertyChangedSignal("FogEnd"):Connect(removeFog)
+Lighting:GetPropertyChangedSignal("FogStart"):Connect(removeFog)
+Lighting:GetPropertyChangedSignal("FogColor"):Connect(removeFog)
+Lighting.Changed:Connect(removeFog)
+
+-- Làm sáng mạnh
+local function fullBright()
+    Lighting.Ambient = Color3.new(1, 1, 1) -- Ánh sáng toàn bộ không gian
+    Lighting.ColorShift_Bottom = Color3.new(1, 1, 1) -- Ánh sáng từ dưới
+    Lighting.ColorShift_Top = Color3.new(1, 1, 1) -- Ánh sáng từ trên
+    Lighting.Brightness = 10 -- Độ sáng cực cao
+    Lighting.OutdoorAmbient = Color3.new(1, 1, 1) -- Tăng độ sáng môi trường ngoài
+end
+
+fullBright()
+Lighting:GetPropertyChangedSignal("Ambient"):Connect(fullBright)
+Lighting:GetPropertyChangedSignal("Brightness"):Connect(fullBright)
+Lighting:GetPropertyChangedSignal("OutdoorAmbient"):Connect(fullBright)
+
+-- Thông báo khi chạy
+game.StarterGui:SetCore("SendNotification", {Title = "No Fog Extreme", Text = "Loading...", Duration = 2})
+game.StarterGui:SetCore("SendNotification", {Title = "Full Light Max", Text = "Loading...", Duration = 3})
