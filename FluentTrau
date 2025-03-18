@@ -1,0 +1,161 @@
+-- Giao diện Andz Hub (màu xanh nước biển, không có tab)
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local MainFrame = Instance.new("Frame")
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Nền đen
+MainFrame.BorderSizePixel = 2
+MainFrame.BorderColor3 = Color3.fromRGB(0, 122, 255) -- Viền xanh nước biển
+MainFrame.Position = UDim2.new(0.3, 0, 0.2, 0)
+MainFrame.Size = UDim2.new(0, 500, 0, 500) -- tăng chiều cao để chứa Get Key
+
+local Title = Instance.new("TextLabel")
+Title.Parent = MainFrame
+Title.BackgroundTransparency = 1
+Title.Size = UDim2.new(1, 0, 0, 50)
+Title.Font = Enum.Font.GothamBold
+Title.Text = "Nhân Dz Hub"
+Title.TextColor3 = Color3.fromRGB(0, 122, 255)
+Title.TextSize = 22
+
+local CloseButton = Instance.new("TextButton")
+CloseButton.Parent = MainFrame
+CloseButton.Position = UDim2.new(0.9, 0, 0, 10)
+CloseButton.Size = UDim2.new(0, 40, 0, 40)
+CloseButton.Text = "X"
+CloseButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+CloseButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+
+local MinimizeButton = Instance.new("TextButton")
+MinimizeButton.Parent = MainFrame
+MinimizeButton.Position = UDim2.new(0.85, 0, 0, 10)
+MinimizeButton.Size = UDim2.new(0, 40, 0, 40)
+MinimizeButton.Text = "-"
+MinimizeButton.BackgroundColor3 = Color3.fromRGB(0, 122, 255)
+-- Bạn có thể thêm code thu nhỏ giao diện tại đây
+
+local ExpandButton = Instance.new("TextButton")
+ExpandButton.Parent = MainFrame
+ExpandButton.Position = UDim2.new(0.8, 0, 0, 10)
+ExpandButton.Size = UDim2.new(0, 40, 0, 40)
+ExpandButton.Text = "□"
+ExpandButton.BackgroundColor3 = Color3.fromRGB(0, 122, 255)
+-- Bạn có thể thêm code phóng to giao diện tại đây
+
+-- PHẦN GET KEY
+local KeyFrame = Instance.new("Frame")
+KeyFrame.Parent = MainFrame
+KeyFrame.Position = UDim2.new(0, 10, 0, 60)
+KeyFrame.Size = UDim2.new(0, 480, 0, 120)
+KeyFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+KeyFrame.BorderSizePixel = 1
+KeyFrame.BorderColor3 = Color3.fromRGB(0, 122, 255)
+
+local GetKeyButton = Instance.new("TextButton")
+GetKeyButton.Parent = KeyFrame
+GetKeyButton.Position = UDim2.new(0, 10, 0, 10)
+GetKeyButton.Size = UDim2.new(0, 150, 0, 30)
+GetKeyButton.Text = "Get Key"
+GetKeyButton.BackgroundColor3 = Color3.fromRGB(0, 122, 255)
+GetKeyButton.Font = Enum.Font.GothamBold
+GetKeyButton.TextSize = 18
+
+local KeyInput = Instance.new("TextBox")
+KeyInput.Parent = KeyFrame
+KeyInput.Position = UDim2.new(0, 170, 0, 10)
+KeyInput.Size = UDim2.new(0, 200, 0, 30)
+KeyInput.PlaceholderText = "Enter key here"
+KeyInput.Font = Enum.Font.Gotham
+KeyInput.TextSize = 18
+
+local CheckKeyButton = Instance.new("TextButton")
+CheckKeyButton.Parent = KeyFrame
+CheckKeyButton.Position = UDim2.new(0, 380, 0, 10)
+CheckKeyButton.Size = UDim2.new(0, 80, 0, 30)
+CheckKeyButton.Text = "Check Key"
+CheckKeyButton.BackgroundColor3 = Color3.fromRGB(0, 122, 255)
+CheckKeyButton.Font = Enum.Font.GothamBold
+CheckKeyButton.TextSize = 18
+
+local WarningLabel = Instance.new("TextLabel")
+WarningLabel.Parent = KeyFrame
+WarningLabel.Position = UDim2.new(0, 10, 0, 50)
+WarningLabel.Size = UDim2.new(0, 450, 0, 30)
+WarningLabel.Text = ""
+WarningLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+WarningLabel.BackgroundTransparency = 1
+WarningLabel.Font = Enum.Font.Gotham
+WarningLabel.TextSize = 18
+
+-- Hệ thống Key
+local storedKey = ""
+local wrongAttempts = 0
+
+-- Hàm tạo key ngẫu nhiên (8 ký tự)
+local function generateRandomKey(length)
+    length = length or 8
+    local charset = {}
+    for c = 48, 57 do table.insert(charset, string.char(c)) end  -- số 0-9
+    for c = 65, 90 do table.insert(charset, string.char(c)) end  -- chữ hoa A-Z
+    for c = 97, 122 do table.insert(charset, string.char(c)) end -- chữ thường a-z
+    local key = ""
+    for i = 1, length do
+        key = key .. charset[math.random(1, #charset)]
+    end
+    return key
+end
+
+-- Tạo key mới mỗi lần tải script
+storedKey = generateRandomKey(8)
+print("Generated Key (for testing):", storedKey)  -- In key ra console (chỉ để kiểm tra, có thể bỏ sau khi hoàn thiện)
+
+-- Hàm copy text vào clipboard (nếu có hàm setclipboard)
+local function copyToClipboard(text)
+    if setclipboard then
+        setclipboard(text)
+    end
+end
+
+-- Link Get Key (đây là link rút gọn từ Linkvertise do bạn tạo)
+local getKeyLink = "https://linkvertise.com/yourlink"  -- thay bằng link thật của bạn
+
+-- Khi nhấn nút Get Key
+GetKeyButton.MouseButton1Click:Connect(function()
+    copyToClipboard(getKeyLink)
+    WarningLabel.Text = "Link copied to clipboard! Complete tasks to get the key."
+    wait(3)
+    WarningLabel.Text = ""
+end)
+
+-- Khi nhấn nút Check Key
+CheckKeyButton.MouseButton1Click:Connect(function()
+    if KeyInput.Text == storedKey then
+        WarningLabel.Text = "Key correct! Script activated."
+        WarningLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+        -- Kích hoạt các chức năng của script sau khi xác thực key đúng
+    else
+        wrongAttempts = wrongAttempts + 1
+        if wrongAttempts == 1 then
+            WarningLabel.Text = "Key incorrect! Warning: one more mistake and you'll be kicked."
+            WarningLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+        elseif wrongAttempts >= 2 then
+            WarningLabel.Text = "Key incorrect twice! Kicking from game..."
+            wait(2)
+            game.Players.LocalPlayer:Kick("Key incorrect twice.")
+        end
+    end
+end)
+
+Lưu ý:
+
+Link Get Key: Hãy thay giá trị của biến getKeyLink bằng link rút gọn thực tế mà bạn tạo trên Linkvertise.
+
+Key hiển thị: Trong code này, key được tạo ngẫu nhiên mỗi lần tải script. Trong môi trường thực tế, bạn cần đảm bảo rằng người dùng chỉ nhận được key sau khi hoàn thành nhiệm vụ bên ngoài (Linkvertise) và họ sẽ so sánh với key thật.
+
+setclipboard: Hàm này hoạt động nếu Roblox cho phép; nếu không, bạn có thể thông báo người dùng copy link thủ công.
+
+
+Hãy test code này và cho mình biết nếu có bất kỳ thay đổi hoặc sửa lỗi nào cần thiết nhé!
